@@ -128,3 +128,5 @@ MIT License. You own your data. Always.
 > "WellNest is not an app. It’s your story, listened to."
 
 ```
+
+Can add the proper facial features, can appear to be a proper human with whom yoiu are talking to.

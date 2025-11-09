@@ -8,20 +8,33 @@ import JounrnalHistory from '../pages/journal/history';
 import JournalIndex from '../pages/journal';
 import Dashboard from '../pages/dashboard';
 import Companion from '../pages/companion';
+import Layout from '@/components/layout/Layout';
+import App from '@/App';
+import WellNestLanding from '@/components/home/WellNestLanding';
+// import Layout from '@/components/Layout';
 
 const AppRoutes = () => {
   return (
     <Router>
+        {/* need layout here */}
         <Routes>
+            <Route element={<Layout/>}>
+              <Route path="" element={<WellNestLanding/>} />
+              <Route path='/settings' element={<Settings/>} />
+              <Route path='/wellness' element={<Wellness/>} />
+              <Route path='/dashboard' element={<Dashboard/>} />
+              <Route path='/companion' element={<Companion/>} />
+              <Route path='/journal/history' element={<JounrnalHistory/>} />
+              <Route path='/journal/index' element={<JournalIndex/>} />
+            </Route>
+
+            {/* no layout */}
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
-            <Route path='/settings' element={<Settings/>} />
-            <Route path='/wellness' element={<Wellness/>} />
-            <Route path='/dashboard' element={<Dashboard/>} />
-            <Route path='/companion' element={<Companion/>} />
-            <Route path='/journal/history' element={<JounrnalHistory/>} />
-            <Route path='/journal/index' element={<JournalIndex/>} />
         </Routes>
+
+        {/* <Routes>
+        </Routes> */}
     </Router>
   )
 }
