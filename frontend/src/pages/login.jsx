@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Mail, Lock, Eye, EyeOff, ArrowRight, Shield, Brain, Sparkles } from 'lucide-react';
-import API from "../api.js";
+import API from "../api/api.js";
+import { useAuth, AuthProvider, AuthContext } from '../pages/Auth.jsx'; 
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +14,8 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { login} = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -22,11 +26,13 @@ const Login = () => {
     try {
       const res = await API.post('/auth/login', formData);
       console.log('Login success:', res.data);
+      login(res.data);
 
       // Optional: store user info or token in localStorage/session
       localStorage.setItem('user', JSON.stringify(res.data));
 
       setSuccess('Login successful!');
+      setTimeout(() => navigate('/dashboard'), 1000); 
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Login failed');

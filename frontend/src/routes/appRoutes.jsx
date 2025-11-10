@@ -11,6 +11,7 @@ import Companion from '../pages/companion';
 import Layout from '@/components/layout/Layout';
 import App from '@/App';
 import WellNestLanding from '@/components/home/WellNestLanding';
+import Profile from '@/pages/Profile';
 // import Layout from '@/components/Layout';
 
 const AppRoutes = () => {
@@ -26,6 +27,7 @@ const AppRoutes = () => {
               <Route path='/companion' element={<Companion/>} />
               <Route path='/journal/history' element={<JounrnalHistory/>} />
               <Route path='/journal/index' element={<JournalIndex/>} />
+              <Route path='/profile' element={<Profile/>} />
             </Route>
 
             {/* no layout */}

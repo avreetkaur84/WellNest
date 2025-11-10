@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Mail, Lock, Eye, EyeOff, ArrowRight, User, Shield, Brain, Sparkles, Check } from 'lucide-react';
-import API from "../api.js";
+import API from "../api/api.js";
+import { useAuth, AuthProvider, AuthContext } from '../pages/Auth.jsx'; 
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState({ type: '', text: '' }); 
+  const [loading, setLoading] = useState(false); 
+  const { login} = useAuth();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,6 +24,17 @@ const Signup = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setFeedbackMessage({ type: '', text: '' }); 
+    if (formData.password !== formData.confirmPassword) {
+        setFeedbackMessage({ type: 'error', text: "Passwords do not match." });
+        return;
+    }
+    if (!formData.agreeToTerms) {
+        setFeedbackMessage({ type: 'error', text: "You must agree to the Terms of Service and Privacy Policy." });
+        return;
+    }
+
+    setLoading(true);
     console.log('Signup:', formData);
     // Map formData to the backend expected format
     const payload = {
@@ -30,11 +48,29 @@ const Signup = () => {
     try {
       const response = await API.post("/auth/signup", payload);
       console.log("Signup successful:", response.data);
-      alert(`Signup successful! Welcome ${response.data.fullName}`);
+      // alert(`Signup successful! Welcome ${response.data.fullName}`);
+      // 1. Call the login function from AuthContext to establish the user session
+      login(response.data); 
+
+      // Display success message before simulating navigation
+      setFeedbackMessage({ 
+          type: 'success', 
+          text: `Account created successfully! Welcome, ${response.data.fullName}. Redirecting...`
+      });
+      
+      // 2. Redirect the user to a protected page (simulated)
+      setTimeout(() => navigate('/dashboard'), 1000); 
       // You can redirect to login page here
     } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert(error.response?.data?.message || "Signup failed!");
+      console.error("Signup failed:", error.response?.data || error.message);
+      // Extract the error message from the simulated API response structure
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred during signup.";
+      setFeedbackMessage({ 
+          type: 'error', 
+          text: errorMessage 
+      });
+    } finally {
+        setLoading(false);
     }
   };
 

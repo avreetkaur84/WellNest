@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Search, Plus, Save, X, Tag, Brain, TrendingUp, Sparkles, Clock, Filter, ChevronLeft, ChevronRight, Check, Smile, Meh, Frown, Heart, Zap } from 'lucide-react';
+import JournalAPI from '../../api/journalAPI.js';
+import { useAuth } from '../../pages/Auth'; 
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
+
 
 const JournalIndex = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -13,6 +18,11 @@ const JournalIndex = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showHistory, setShowHistory] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+
+  const [entries, setEntries] = useState([]);
 
   const moods = [
     { emoji: '😊', label: 'Happy', color: 'bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200' },
@@ -36,6 +46,7 @@ const JournalIndex = () => {
     summary: 'You mentioned feeling grateful and hopeful. Your writing shows a positive shift in perspective.',
     trend: 'Your stress levels are 25% lower than last week. Keep up the mindful journaling! 🌟'
   };
+
 
   // Auto-save simulation
   useEffect(() => {
@@ -61,9 +72,55 @@ const JournalIndex = () => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleSave = () => {
-    console.log('Saving journal:', { date: currentDate, content: journalContent, mood: selectedMood, tags });
-    // Later: Connect to backend API
+  const handleSave = async () => {
+    console.log("Save button clicked"); // 👈 add this first
+      if (!journalContent.trim() || !selectedMood) {
+        toast.error("Please write something and select your mood!");
+        return;
+      }
+
+    const entryData = {
+      title: '', // optional auto-title logic
+      content: journalContent,
+      moodEmoji: selectedMood.emoji,
+      moodLabel: selectedMood.label,
+      entryDate: currentDate.toISOString().split('T')[0], // YYYY-MM-DD
+    };
+
+    try {
+      const userId = user.id; 
+      const response = await fetch(`http://localhost:8080/api/journals?userId=${userId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entryData)
+      });
+      
+      if (!response.ok) throw new Error('Failed to save entry');
+
+      const savedEntry = await response.json();
+      setEntries([savedEntry, ...entries]); // prepend new entry
+      setJournalContent('');
+      setSelectedMood(null);
+      setTags([]);
+      setIsEditing(false);
+
+      console.log("Journal saved:", savedEntry);
+      toast.success("🎉 Your journal entry has been saved!", {
+        duration: 5000, // show for 5 seconds
+        style: {
+          background: '#10b981', // emerald-500
+          color: '#fff',
+          fontWeight: 'bold',
+        },
+        iconTheme: {
+          primary: '#fff',
+          secondary: '#10b981',
+        },
+      });
+      setTimeout(() => navigate('/journal/history'), 1000);
+    } catch (err) {
+      console.error("Failed to save entry:", err);
+    }
   };
 
   const formatDate = (date) => {
@@ -84,7 +141,7 @@ const JournalIndex = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/20 to-teal-50/20">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-6 pb-40">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -152,7 +209,7 @@ const JournalIndex = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* History Sidebar */}
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {showHistory && (
               <motion.aside
                 initial={{ opacity: 0, x: -20 }}
@@ -203,10 +260,10 @@ const JournalIndex = () => {
                 </div>
               </motion.aside>
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
 
           {/* Main Editor Area */}
-          <div className={`${showHistory ? 'lg:col-span-6' : 'lg:col-span-9'} space-y-6`}>
+          <div className={`${showHistory ? 'lg:col-span-8' : 'lg:col-span-8'} space-y-6`}>
             {/* Editor Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -316,7 +373,7 @@ const JournalIndex = () => {
             </motion.div>
 
             {/* Empty State */}
-            {!journalContent && (
+            {/* {!journalContent && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -329,7 +386,7 @@ const JournalIndex = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">No entry yet today</h3>
                 <p className="text-gray-600">Start your first journal entry and let your thoughts flow freely 💭</p>
               </motion.div>
-            )}
+            )} */}
           </div>
 
           {/* AI Insights Panel */}
@@ -337,7 +394,7 @@ const JournalIndex = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-3 space-y-4"
+            className="lg:col-span-4 space-y-4"
           >
             {/* Emotion Insight Card */}
             <div className={`bg-gradient-to-br ${aiInsights.emotionColor} rounded-3xl shadow-xl p-6 text-white relative overflow-hidden`}>
