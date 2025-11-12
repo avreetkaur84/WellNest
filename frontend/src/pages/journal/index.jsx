@@ -208,60 +208,6 @@ const JournalIndex = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* History Sidebar */}
-          {/* <AnimatePresence>
-            {showHistory && (
-              <motion.aside
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="lg:col-span-3 space-y-4"
-              >
-                <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-bold text-gray-900">Past Entries</h3>
-                    <button className="w-9 h-9 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
-                      <Filter className="w-4 h-4 text-gray-700" />
-                    </button>
-                  </div>
-
-                  <div className="space-y-3">
-                    {mockEntries.map((entry, index) => (
-                      <motion.div
-                        key={entry.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        onClick={() => setSelectedEntry(entry)}
-                        className={`p-4 rounded-2xl cursor-pointer transition-all border-2 ${
-                          selectedEntry?.id === entry.id
-                            ? 'bg-emerald-50 border-emerald-300'
-                            : 'bg-gray-50 border-transparent hover:bg-gray-100'
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="text-2xl">{entry.mood}</div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-gray-900 text-sm truncate">{entry.title}</h4>
-                            <p className="text-xs text-gray-500 mb-2">{entry.date}</p>
-                            <p className="text-xs text-gray-600 line-clamp-2">{entry.preview}</p>
-                            <div className="flex gap-1 mt-2">
-                              {entry.tags.slice(0, 2).map((tag, i) => (
-                                <span key={i} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.aside>
-            )}
-          </AnimatePresence> */}
-
           {/* Main Editor Area */}
           <div className={`${showHistory ? 'lg:col-span-8' : 'lg:col-span-8'} space-y-6`}>
             {/* Editor Card */}

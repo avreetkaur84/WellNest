@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, BookOpen, MessageCircle, TrendingUp, Calendar, Sparkles, RefreshCw, ArrowRight, Flame, Clock, Smile, Frown, Meh, Award, Target } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAuth } from '../pages/Auth'; 
 
 const Dashboard = () => {
-  const [userName] = useState('Avreet');
+  const { isAuthenticated, user, logout } = useAuth();
+  // const [userName] = useState('Avreet');
   
   // Mock data - replace with API calls later
   const weeklyMoodData = [
@@ -59,7 +61,7 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                  Hey {userName}, how are you feeling today? 👋
+                  Hey {user?.fullName || "there"}, how are you feeling today? 👋
                 </h1>
                 <p className="text-emerald-100">Your mental wellness dashboard</p>
               </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, BookOpen, MessageCircle, TrendingUp, Shield, Lock, Heart, Sparkles, ChevronRight, Menu, X, Check, Star } from 'lucide-react';
 import HeroSection from './HeroSection';
+import FeaturesSection from './FeatureSection';
 
 const WellNestLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,7 +56,7 @@ const WellNestLanding = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen  bg-gradient-to-br from-emerald-50 via-teal-50 to-blue-50 ">
       {/* Navigation */}
       {/* <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -83,12 +84,12 @@ const WellNestLanding = () => {
       </nav> */}
 
       {/* Hero Section */}
-      <section className="pt-20 pb-20 px-6">
+      <section className="pt-20 pb-20 px-10">
         <HeroSection />
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 px-6 bg-white">
+      <section id="features" className="py-24 px-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -119,9 +120,10 @@ const WellNestLanding = () => {
           </div>
         </div>
       </section>
+      {/* <FeaturesSection /> */}
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-24 px-6 bg-gray-50">
+      <section id="how-it-works" className="py-24 px-10 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -149,7 +151,7 @@ const WellNestLanding = () => {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 px-6 bg-white">
+      <section id="testimonials" className="py-24 px-10 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
